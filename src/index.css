@@ -8,11 +8,23 @@ body {
 }
 .square {
   background: #fff;
-  border: solid 1px black;
-  height: 36px;
-  width: 36px;
-  margin-top: -3px;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
   margin-right: -1px;
+  margin-top: -1px;
   padding: 0;
-  line-height: 36px;
+  text-align: center;
+  width: 34px;
+}
+.square:focus {
+  outline: none;
+}
+
+.game {
+  display: flex;
+  flex-direction: row;
 }
