@@ -19,8 +19,6 @@ const checkWinner = squares => {
   return null;
 };
 const getChange = (list1, list2) => {
-  console.log(list1);
-  console.log(list2);
   for (let i = 0; i < list2.length + 1; i++) {
     if (list1[i] !== list2[i]) {
       console.log(i);
@@ -31,16 +29,16 @@ const getChange = (list1, list2) => {
 };
 const toColRow = i => {
   let col = 0;
-  let row = 0;
   if (0 <= i && i <= 2) {
-    col = 1;
+    col = 0;
   } else if (3 <= i && i <= 5) {
-    col = 2;
+    col = 1;
+    i -= 2;
   } else {
-    col = 3;
+    col = 2;
+    i -= 5;
   }
-  row = col === 1 ? i + col : i - col;
-  return [col, row];
+  return [col, i];
 };
 const Square = props => {
   return (
@@ -60,25 +58,18 @@ class Board extends Component {
     );
   }
   render() {
-    return (
-      <div>
+    const col = [0, 1, 2];
+    const row = [0, 3, 6];
+    const board = row.map(rowIndex => {
+      return (
         <div className="boardRow">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
+          {col.map(colIndex => {
+            return this.renderSquare(colIndex + rowIndex);
+          })}
         </div>
-        <div className="boardRow">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="boardRow">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
+      );
+    });
+    return <div>{board}</div>;
   }
 }
 
@@ -90,7 +81,8 @@ class Game extends Component {
       }
     ],
     xIsNext: true,
-    stepNumber: 0
+    stepNumber: 0,
+    btnSelected: 0
   };
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
@@ -107,7 +99,8 @@ class Game extends Component {
   jumpTo(step) {
     this.setState({
       stepNumber: step,
-      xIsNext: step % 2 === 0
+      xIsNext: step % 2 === 0,
+      btnSelected: step
     });
   }
   render() {
@@ -120,11 +113,16 @@ class Game extends Component {
         : null;
       const coord = toColRow(lastMove);
       const desc = move
-        ? "Jump to move #" + move + "(" + coord + ")"
+        ? "Jump to move #" + move + " (" + coord + ")"
         : "Go to game start";
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button
+            className={this.state.btnSelected === move ? "selected" : null}
+            onClick={() => this.jumpTo(move)}
+          >
+            {desc}
+          </button>
         </li>
       );
     });
