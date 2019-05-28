@@ -152,11 +152,16 @@ class Game extends Component {
     if (this.state.reverse) {
       moves = moves.reverse();
     }
-    let status =
-      winner[0] !== null
-        ? "Winner is: " + winner[0]
-        : "Next player: " + (this.state.xIsNext ? "X" : "O");
-
+    let status = null;
+    if (winner[0] !== null) {
+      status = "Winner is: " + winner[0];
+    } else {
+      if (this.state.stepNumber < 9) {
+        status = "Next player: " + (this.state.xIsNext ? "X" : "O");
+      } else {
+        status = "Draw!";
+      }
+    }
     return (
       <div className="game">
         <div className="gameBoard">
