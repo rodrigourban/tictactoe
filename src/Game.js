@@ -109,6 +109,19 @@ class Game extends Component {
       reverse: !this.state.reverse
     });
   }
+  restartGame() {
+    this.setState({
+      history: [
+        {
+          squares: Array(9).fill(null)
+        }
+      ],
+      xIsNext: true,
+      stepNumber: 0,
+      btnSelected: 0,
+      reverse: false
+    });
+  }
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -149,6 +162,7 @@ class Game extends Component {
           <div>{status}</div>
           <ol>{moves}</ol>
           <button onClick={() => this.toggleOrder()}>Change order</button>
+          <button onClick={() => this.restartGame()}>Restart</button>
         </div>
       </div>
     );
