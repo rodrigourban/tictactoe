@@ -13,15 +13,14 @@ const checkWinner = squares => {
   for (let i = 0; i < combinations.length; i++) {
     const [a, b, c] = combinations[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return [squares[a], [a, b, c]];
     }
   }
-  return null;
+  return [null, null];
 };
 const getChange = (list1, list2) => {
   for (let i = 0; i < list2.length + 1; i++) {
     if (list1[i] !== list2[i]) {
-      console.log(i);
       return i;
     }
   }
@@ -42,16 +41,17 @@ const toColRow = i => {
 };
 const Square = props => {
   return (
-    <button className="square" onClick={props.onClick}>
+    <button className={props.classes} onClick={props.onClick}>
       {props.value}
     </button>
   );
 };
 
 class Board extends Component {
-  renderSquare(i) {
+  renderSquare(i, winner) {
     return (
       <Square
+        classes={winner ? "square highlight" : "square"}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
       />
@@ -64,7 +64,11 @@ class Board extends Component {
       return (
         <div className="boardRow">
           {col.map(colIndex => {
-            return this.renderSquare(colIndex + rowIndex);
+            let flag = false;
+            if (this.props.winner) {
+              flag = this.props.winner.indexOf(colIndex + rowIndex) > -1;
+            }
+            return this.renderSquare(colIndex + rowIndex, flag);
           })}
         </div>
       );
@@ -89,7 +93,7 @@ class Game extends Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-    if (checkWinner(squares) || squares[i]) return;
+    if (checkWinner(squares)[0] || squares[i]) return;
     squares[i] = this.state.xIsNext ? "X" : "O";
     this.setState({
       history: history.concat([{ squares: squares }]),
@@ -149,14 +153,18 @@ class Game extends Component {
       moves = moves.reverse();
     }
     let status =
-      winner !== null
-        ? "Winner is: " + winner
+      winner[0] !== null
+        ? "Winner is: " + winner[0]
         : "Next player: " + (this.state.xIsNext ? "X" : "O");
 
     return (
       <div className="game">
         <div className="gameBoard">
-          <Board squares={current.squares} onClick={i => this.handleClick(i)} />
+          <Board
+            squares={current.squares}
+            winner={winner[1]}
+            onClick={i => this.handleClick(i)}
+          />
         </div>
         <div className="gameInfo">
           <div>{status}</div>
