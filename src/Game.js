@@ -82,7 +82,8 @@ class Game extends Component {
     ],
     xIsNext: true,
     stepNumber: 0,
-    btnSelected: 0
+    btnSelected: 0,
+    reverse: false
   };
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
@@ -103,18 +104,23 @@ class Game extends Component {
       btnSelected: step
     });
   }
+  toggleOrder() {
+    this.setState({
+      reverse: !this.state.reverse
+    });
+  }
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = checkWinner(current.squares);
-    const moves = history.map((step, move) => {
+    let moves = history.map((step, move) => {
       const lastMove = move
         ? getChange(history[move - 1].squares, history[move].squares)
         : null;
       const coord = toColRow(lastMove);
       const desc = move
         ? "Jump to move #" + move + " (" + coord + ")"
-        : "Go to game start";
+        : "Jump to game start #0";
       return (
         <li key={move}>
           <button
@@ -126,7 +132,9 @@ class Game extends Component {
         </li>
       );
     });
-
+    if (this.state.reverse) {
+      moves = moves.reverse();
+    }
     let status =
       winner !== null
         ? "Winner is: " + winner
@@ -140,6 +148,7 @@ class Game extends Component {
         <div className="gameInfo">
           <div>{status}</div>
           <ol>{moves}</ol>
+          <button onClick={() => this.toggleOrder()}>Change order</button>
         </div>
       </div>
     );
