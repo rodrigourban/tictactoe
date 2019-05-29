@@ -1,32 +1,70 @@
+* {
+  box-sizing: border-box;
+}
 body {
+  height: 100%;
   margin: 0;
   padding: 0;
-  font: 14px "Century Gothic", Futura, sans-serif;
+  background: rgb(27, 27, 27);
+  color: green;
+  font-family: "Roboto", sans-serif;
 }
-.status {
-  margin-bottom: 10px;
+.game {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: 1fr 2fr 4fr 2fr;
+  align-items: center;
+}
+.nav {
+  grid-row: 1;
+  grid-column: 1/4;
+  height: 100%;
+  padding-right: 1rem;
+  background: rgb(14, 13, 13);
+}
+.history {
+  width: 100%;
+  padding-top: 1rem;
+  color: white;
+  border: none;
+  height: 100%;
+  font-size: 1.2rem;
+  text-align: right;
+}
+.gameInfo {
+  grid-column: 2;
+  grid-row: 2;
+  margin: auto;
+  font-size: 2rem;
+}
+.gameBoard {
+  grid-column: 2;
+  grid-row: 3;
+  display: flex;
+  margin: auto;
+}
+.footer {
+  grid-row: 4;
+  grid-column: 2;
+  margin: auto;
 }
 .square {
-  background: #fff;
-  border: 1px solid #999;
+  background: rgba(216, 211, 211, 0.048);
+  border: 1px solid transparent;
   float: left;
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 34px;
+  height: 4.5rem;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 4.5rem;
+  color: #fff;
 }
 .square:focus {
   outline: none;
-}
-
-.game {
-  display: flex;
-  flex-direction: row;
 }
 
 .selected {
@@ -35,4 +73,22 @@ body {
 
 .highlight {
   color: red;
+}
+.restartBtn {
+  width: 150px;
+  height: 30px;
+  font-weight: 300;
+  padding: 0.3em;
+  border: 0.1em solid #fff;
+  border-radius: 15px;
+  color: #ffff;
+  text-align: center;
+  transition: all 0.6s;
+}
+.restartBtn:hover {
+  background: green;
+}
+.orderbtn {
+  display: none;
+  visibility: hidden;
 }

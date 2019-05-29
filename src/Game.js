@@ -164,6 +164,17 @@ class Game extends Component {
     }
     return (
       <div className="game">
+        <nav className="nav">
+          <button className="orderbtn" onClick={() => this.toggleOrder()}>
+            Change order
+          </button>
+          <div className="history" onClick={() => alert("gay")}>
+            History
+          </div>
+        </nav>
+        <div className="gameInfo">
+          <div>{status}</div>
+        </div>
         <div className="gameBoard">
           <Board
             squares={current.squares}
@@ -171,12 +182,11 @@ class Game extends Component {
             onClick={i => this.handleClick(i)}
           />
         </div>
-        <div className="gameInfo">
-          <div>{status}</div>
-          <ol>{moves}</ol>
-          <button onClick={() => this.toggleOrder()}>Change order</button>
-          <button onClick={() => this.restartGame()}>Restart</button>
-        </div>
+        <footer className="footer">
+          <div className="restartBtn" onClick={() => this.restartGame()}>
+            Restart
+          </div>
+        </footer>
       </div>
     );
   }
