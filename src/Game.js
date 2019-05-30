@@ -87,7 +87,8 @@ class Game extends Component {
     xIsNext: true,
     stepNumber: 0,
     btnSelected: 0,
-    reverse: false
+    reverse: false,
+    overlay: "hidden"
   };
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
@@ -123,7 +124,8 @@ class Game extends Component {
       xIsNext: true,
       stepNumber: 0,
       btnSelected: 0,
-      reverse: false
+      reverse: false,
+      overlay: "hidden"
     });
   }
   render() {
@@ -139,13 +141,13 @@ class Game extends Component {
         ? "Jump to move #" + move + " (" + coord + ")"
         : "Jump to game start #0";
       return (
-        <li key={move}>
-          <button
+        <li key={move} className="moveList">
+          <div
             className={this.state.btnSelected === move ? "selected" : null}
             onClick={() => this.jumpTo(move)}
           >
             {desc}
-          </button>
+          </div>
         </li>
       );
     });
@@ -163,30 +165,44 @@ class Game extends Component {
       }
     }
     return (
-      <div className="game">
-        <nav className="nav">
-          <button className="orderbtn" onClick={() => this.toggleOrder()}>
-            Change order
+      <div className="main">
+        <div className={`overlay ${this.state.overlay}`}>
+          <button
+            className="closeBtn"
+            onClick={() => this.setState({ overlay: "hidden" })}
+          >
+            <i class="material-icons">clear</i>
           </button>
-          <div className="history" onClick={() => alert("gay")}>
-            History
-          </div>
-        </nav>
-        <div className="gameInfo">
-          <div>{status}</div>
+          <ul>{moves}</ul>
+          <button className="orderbtn" onClick={() => this.toggleOrder()}>
+            <i class="material-icons">swap_vert</i>Change order
+          </button>
         </div>
-        <div className="gameBoard">
-          <Board
-            squares={current.squares}
-            winner={winner[1]}
-            onClick={i => this.handleClick(i)}
-          />
-        </div>
-        <footer className="footer">
-          <div className="restartBtn" onClick={() => this.restartGame()}>
-            Restart
+        <div className="game">
+          <nav className="nav">
+            <div
+              className="history"
+              onClick={() => this.setState({ overlay: "show" })}
+            >
+              <i className="material-icons">view_headline</i>History
+            </div>
+          </nav>
+          <div className="gameInfo">
+            <div>{status}</div>
           </div>
-        </footer>
+          <div className="gameBoard">
+            <Board
+              squares={current.squares}
+              winner={winner[1]}
+              onClick={i => this.handleClick(i)}
+            />
+          </div>
+          <footer className="footer">
+            <button className="restartBtn" onClick={() => this.restartGame()}>
+              <i className="material-icons">restore</i> Restart
+            </button>
+          </footer>
+        </div>
       </div>
     );
   }
